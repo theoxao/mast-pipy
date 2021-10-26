@@ -19,7 +19,7 @@ def commit():
     g.output(3,False)
 
 def update_state(position, value):
-    high = position*2 + value
+    high = position*2 + int(value)
     for i in range(high-1):
         move(False)
     move(True)
