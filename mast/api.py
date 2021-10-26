@@ -23,12 +23,16 @@ def device_list():
     for device in result:
         if device.__contains__('room_id'):
             rs = query_db('select * from room where id = ?', (device['room_id'],))
-            if len(rs) !=0:
+            if len(rs) != 0:
                 device['room'] = rs[0]
+            else:
+                device['room'] = None
         if device.__contains__('cate_id'):
             cs = query_db('select * from cate where id = ?', (device['cate_id'],))
             if len(cs) != 0:
                 device['cate'] = cs[0]
+            else:
+                device['cate'] = None
     return ok(result)
 
 
