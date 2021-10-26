@@ -22,9 +22,13 @@ def device_list():
     result = query_db('select * from device')
     for device in result:
         if device.__contains__('room_id'):
-            device['room'] = query_db('select * from room where id = ?', (device['room_id'],))[0]
+            rs = query_db('select * from room where id = ?', (device['room_id'],))
+            if len(rs) !=0:
+                device['room'] = rs[0]
         if device.__contains__('cate_id'):
-            device['cate'] = query_db('select * from cate where id = ?' , (device['cate_id'],))[0]
+            cs = query_db('select * from cate where id = ?', (device['cate_id'],))
+            if len(cs) != 0:
+                device['cate'] = cs[0]
     return ok(result)
 
 
