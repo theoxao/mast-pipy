@@ -3,12 +3,16 @@ import os
 
 
 def create_app(test_config=None):
-    app= Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)
+    database = None
+    if '' in os.environ:
+        database = os.environ['DATABASE_URL']
+    else:
+        database = '/Users/theo/workspace/theo/mast-db/mast.db',
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE='/Users/theo/workspace/theo/mast-db/mast.db',
+        DATABASE=database
     )
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
