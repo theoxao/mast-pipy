@@ -3,8 +3,9 @@ import socket
 
 import requests
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, app
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .pi import update_state
@@ -17,12 +18,6 @@ def ok(result):
     return jsonify(code=200, message='ok', data=result)
 
 
-@app.after_request
-def cors(environ):
-    environ.headers['Access-Control-Allow-Origin']='*'
-    environ.headers['Access-Control-Allow-Method']='*'
-    environ.headers['Access-Control-Allow-Headers']='x-requested-with,content-type'
-    return environ
 
 
 @bp.route("/device/list", methods=['GET'])

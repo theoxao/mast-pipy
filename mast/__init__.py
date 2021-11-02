@@ -1,9 +1,11 @@
 from flask import Flask,g,current_app
+from flask_cors import *
 import os
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app, supports_credentials=True)
     database = None
     if 'DATABASE_URL' in os.environ:
         database = os.environ['DATABASE_URL']
