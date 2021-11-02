@@ -94,4 +94,4 @@ def update_device():
     conn.execute('update device set value = ? where id = ? ', (value, dev_id))
     # conn.execute('insert into operate_record ')
     conn.commit()
-    return ok(value)
+    return ok(int(value))
