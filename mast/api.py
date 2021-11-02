@@ -18,8 +18,6 @@ def ok(result):
     return jsonify(code=200, message='ok', data=result)
 
 
-
-
 @bp.route("/device/list", methods=['GET'])
 def device_list():
     result = query_db('select * from device')
@@ -96,4 +94,4 @@ def update_device():
     conn.execute('update device set value = ? where id = ? ', (value, dev_id))
     # conn.execute('insert into operate_record ')
     conn.commit()
-    return ok(None)
+    return ok(value)
