@@ -1,5 +1,6 @@
 import json
 import socket
+import time
 
 import requests
 from flask import (
@@ -12,6 +13,8 @@ from .pi import update_state
 from .sqlite import get_db, query_db
 
 bp = Blueprint('api', __name__, url_prefix='/api')
+
+globals().setdefault('timestamp', int(round(time.time() * 1000)))
 
 
 def ok(result):
@@ -93,5 +96,11 @@ def update_device():
     conn = get_db()
     conn.execute('update device set value = ? where id = ? ', (value, dev_id))
     # conn.execute('insert into operate_record ')
+    globals().__setattr__('timestamp', int(round(time.time() * 1000)))
     conn.commit()
     return ok(int(value))
+
+
+@bp.route('/param/timestamp', methods=['GET'])
+def param_timestamp():
+    return ok(globals().get('timestamp'))
