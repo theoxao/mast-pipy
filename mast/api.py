@@ -96,7 +96,7 @@ def update_device():
     conn = get_db()
     conn.execute('update device set value = ? where id = ? ', (value, dev_id))
     # conn.execute('insert into operate_record ')
-    globals().__setattr__('timestamp', int(round(time.time() * 1000)))
+    globals().update({'timestamp': int(round(time.time() * 1000))})
     conn.commit()
     return ok(int(value))
 
