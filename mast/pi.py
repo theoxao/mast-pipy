@@ -10,13 +10,13 @@ g.setup(4, g.OUT, initial= g.LOW)
 
 def move(value):
     g.output(2, value)
-    g.output(4,False)
-    g.output(4,True)
+    g.output(3, False)
+    g.output(3, True)
 
 
 def commit():
-    g.output(3, True)
-    g.output(3, False)
+    g.output(4, True)
+    g.output(4, False)
 
 
 def update_state(position, value):
@@ -29,10 +29,10 @@ def update_state(position, value):
         move(False)
         sleep(0.05)
     commit()
-    for i in range(32):
-        move(False)
-        sleep(0.05)
-    commit()
+    # for i in range(32):
+    #     move(False)
+    #     sleep(0.05)
+    # commit()
     sleep(0.1)
         
     
