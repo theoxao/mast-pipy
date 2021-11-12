@@ -10,8 +10,8 @@ g.setup(4, g.OUT, initial= g.LOW)
 
 def move(value):
     g.output(2, value)
-    g.output(4,True)
     g.output(4,False)
+    g.output(4,True)
 
 
 def commit():
