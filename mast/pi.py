@@ -34,6 +34,7 @@ def update_state(position, value):
         move(False)
         commit()
     g.output(17, False)
+    time.sleep(0.3)
     g.output(17, True)
     for i in range(32):
         move(False)
