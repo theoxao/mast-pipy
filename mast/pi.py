@@ -24,6 +24,7 @@ def commit():
 
 def update_state(position, value):
     high = position*2 + int(value)
+    print(high)
     g.output(17, True)
     for i in range(32 - high):
         move(False)
