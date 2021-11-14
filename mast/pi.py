@@ -26,17 +26,17 @@ def update_state(position, value):
     high = position*2 + int(value)
     print(high)
     g.output(17, True)
-    for i in range(32 - high):
+    for i in range(high-1):
         move(False)
         commit()
     move(True)
     commit()
-    for i in range(high-1):
+    for i in range(32-high):
         move(False)
         commit()
     time.sleep(1)
     g.output(17, False)
-    time.sleep(2)
+    time.sleep(1)
     g.output(17, True)
     for i in range(32):
         move(False)
