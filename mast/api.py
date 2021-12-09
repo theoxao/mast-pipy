@@ -21,6 +21,24 @@ def ok(result):
     return jsonify(code=200, message='ok', data=result)
 
 
+@bp.route("/aligenie/task", methods=['POST'])
+def aligenie_task():
+    query = request.get_json()['taskQuery']
+    print(query)
+    return jsonify('''
+        {
+            "returnCode": "0",
+            "returnErrorSolution": "",
+            "returnMessage": "",
+            "returnValue": {    
+                "reply": "好的",
+                "resultType": "RESULT",
+                "executeCode": "SUCCESS"
+            }
+        }
+    ''')
+
+
 @bp.route("/device/list", methods=['GET'])
 def device_list():
     result = query_db('select * from device')
