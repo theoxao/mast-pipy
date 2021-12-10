@@ -23,7 +23,7 @@ def ok(result):
 
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
-    query = request.get_json()['taskQuery']
+    query = request.get_json()
     print(query)
     return json.dumps({
         "returnCode": "0",
