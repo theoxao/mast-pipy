@@ -25,8 +25,7 @@ def ok(result):
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
-    entities = query['slotEntities']
-    logging.log(logging.INFO, entities)
+    logging.log(logging.INFO, jsonify(query))
     return json.dumps({
         "returnCode": "0",
         "returnErrorSolution": "",
