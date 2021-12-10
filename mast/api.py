@@ -25,7 +25,7 @@ def ok(result):
 def aligenie_task():
     query = request.get_json()['taskQuery']
     print(query)
-    return json.dump({
+    return json.dumps({
         "returnCode": "0",
         "returnErrorSolution": "",
         "returnMessage": "",
