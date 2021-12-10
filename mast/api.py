@@ -26,7 +26,7 @@ def ok(result):
 def aligenie_task():
     query = request.get_json()
     entities = query['slotEntities']
-    logging.log(logging.INFO, query)
+    logging.log(logging.INFO, query, entities)
     return json.dumps({
         "returnCode": "0",
         "returnErrorSolution": "",
