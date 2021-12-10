@@ -25,18 +25,16 @@ def ok(result):
 def aligenie_task():
     query = request.get_json()['taskQuery']
     print(query)
-    return '''
-        {
-            "returnCode": "0",
-            "returnErrorSolution": "",
-            "returnMessage": "",
-            "returnValue": {    
-                "reply": "好的",
-                "resultType": "RESULT",
-                "executeCode": "SUCCESS"
-            }
+    return json.dump({
+        "returnCode": "0",
+        "returnErrorSolution": "",
+        "returnMessage": "",
+        "returnValue": {
+            "reply": "好的",
+            "resultType": "RESULT",
+            "executeCode": "SUCCESS"
         }
-    '''
+    })
 
 
 @bp.route("/device/list", methods=['GET'])
