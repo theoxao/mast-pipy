@@ -25,7 +25,7 @@ def ok(result):
 def aligenie_task():
     query = request.get_json()['taskQuery']
     print(query)
-    return jsonify('''
+    return ok('''
         {
             "returnCode": "0",
             "returnErrorSolution": "",
