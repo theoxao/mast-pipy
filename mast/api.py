@@ -1,6 +1,7 @@
 import json
 import socket
 import time
+import logging
 
 import requests
 from flask import (
@@ -24,7 +25,8 @@ def ok(result):
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
-    print(query)
+    entities = query['slotEntities']
+    logging.log(logging.INFO, query)
     return json.dumps({
         "returnCode": "0",
         "returnErrorSolution": "",
