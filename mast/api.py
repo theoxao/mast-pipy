@@ -34,7 +34,7 @@ def aligenie_task():
             "resultType": "RESULT",
             "executeCode": "SUCCESS"
         }
-    })
+    }), 200, [("Content-Type", "application/json")]
 
 
 @bp.route("/device/list", methods=['GET'])
