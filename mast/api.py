@@ -45,9 +45,14 @@ def aligenie_task():
         pos = 6
     if v1 == '主卧灯光':
         pos = 7
+    conn = get_db()
     result = query_db('select * from device where position = ?', (pos,))[0]
     origin = result['value']
     update_state(pos, origin ^ 1)
+    conn.execute('update device set value = ? where position = ? ', (origin ^ 1, pos))
+    # conn.execute('insert into operate_record ')
+    globals().update({'timestamp': int(round(time.time() * 1000))})
+    conn.commit()
     return json.dumps({
         "returnCode": "0",
         "returnErrorSolution": "",
