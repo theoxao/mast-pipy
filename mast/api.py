@@ -163,3 +163,14 @@ def upload():
     conn.execute("insert into upload_file(name , path, create_time) values (?,?,?)", (filename, path, time.time()))
     conn.commit()
     return ok(path)
+
+
+@bp.route("/pdf2image", methods=['POST'])
+def pdf2image():
+    from pdf2image import convert_from_path
+    path = request.args.get('path')
+    directory = os.path.dirname(path)
+    filename = os.path.basename(path)
+    name, _ = os.path.splitext(filename)
+    out_path = os.path.join('/data/pdf2image/', directory + '/' + name)
+    convert_from_path(path, output_folder=out_path)
