@@ -1,4 +1,5 @@
 import json
+import os.path
 import socket
 import time
 import logging
@@ -9,6 +10,7 @@ from flask import (
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 
 from .pi import update_state
 from .sqlite import get_db, query_db
@@ -148,3 +150,16 @@ def update_device():
 @bp.route('/param/timestamp', methods=['GET'])
 def param_timestamp():
     return ok(globals().get('timestamp'))
+
+
+@bp.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+    filename, ext = os.path.splitext(file.filename)
+    fn = int(round(time.time() * 1000)).__str__() + ext
+    path = os.path.join('/data/file/', secure_filename(fn))
+    conn = get_db()
+    file.save(path)
+    conn.execute("insert into upload_file(name , path, create_time) values (?,?,?)", (filename, path, time.time()))
+    conn.commit()
+    return ok(path)
