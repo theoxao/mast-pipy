@@ -157,7 +157,7 @@ def upload():
     file = request.files['file']
     filename, ext = os.path.splitext(file.filename)
     fn = int(round(time.time() * 1000)).__str__() + ext
-    path = os.path.join('/data/file/', secure_filename(fn))
+    path = os.path.join('/home/pi/remarkable/pdf', secure_filename(fn))
     conn = get_db()
     file.save(path)
     conn.execute("insert into upload_file(name , path, create_time) values (?,?,?)", (filename, path, time.time()))
@@ -172,6 +172,8 @@ def pdf2image():
     directory = os.path.dirname(path)
     filename = os.path.basename(path)
     name, _ = os.path.splitext(filename)
-    out_path = os.path.join(directory, '/' + name)
+    out_path = directory + '/' + name
+    print(out_path)
+    os.mkdir(out_path)
     convert_from_path(path, output_folder=out_path)
     return ok(out_path)
