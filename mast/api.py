@@ -174,3 +174,4 @@ def pdf2image():
     name, _ = os.path.splitext(filename)
     out_path = os.path.join('/data/pdf2image/', directory + '/' + name)
     convert_from_path(path, output_folder=out_path)
+    return ok(out_path)
