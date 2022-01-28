@@ -172,8 +172,8 @@ executor = ThreadPoolExecutor(5)
 @bp.route("/pdf2image", methods=['POST'])
 def pdf2image():
     path = request.args.get('path')
-    out_path = executor.submit(transfer, path)
-    return ok(out_path)
+    executor.submit(transfer, path)
+    return ok()
 
 
 def transfer(path):
