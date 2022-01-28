@@ -172,17 +172,16 @@ executor = ThreadPoolExecutor(5)
 @bp.route("/pdf2image", methods=['POST'])
 def pdf2image():
     path = request.args.get('path')
-    executor.submit(transfer, path)
-    return ok()
-
-
-def transfer(path):
-    from pdf2image import convert_from_path
     directory = os.path.dirname(path)
     filename = os.path.basename(path)
     name, _ = os.path.splitext(filename)
     out_path = directory + '/' + name
     print(out_path)
     os.mkdir(out_path)
+    executor.submit(transfer, path, out_path)
+    return ok(out_path)
+
+
+def transfer(path, out_path):
+    from pdf2image import convert_from_path
     convert_from_path(path, output_folder=out_path)
-    return out_path
