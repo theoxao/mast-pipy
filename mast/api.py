@@ -3,6 +3,7 @@ import os.path
 import socket
 import time
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 import requests
 from flask import (
@@ -165,10 +166,18 @@ def upload():
     return ok(path)
 
 
+executor = ThreadPoolExecutor(5)
+
+
 @bp.route("/pdf2image", methods=['POST'])
 def pdf2image():
-    from pdf2image import convert_from_path
     path = request.args.get('path')
+    out_path = executor.submit(transfer, path)
+    return ok(out_path)
+
+
+def transfer(path):
+    from pdf2image import convert_from_path
     directory = os.path.dirname(path)
     filename = os.path.basename(path)
     name, _ = os.path.splitext(filename)
@@ -176,4 +185,4 @@ def pdf2image():
     print(out_path)
     os.mkdir(out_path)
     convert_from_path(path, output_folder=out_path)
-    return ok(out_path)
+    return out_path
