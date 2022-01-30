@@ -185,4 +185,4 @@ def pdf2image():
 def transfer(path, out_path):
     from pdf2image import convert_from_path
     logging.log(logging.INFO, "transfer pdf to image, {}, {}", path, out_path)
-    convert_from_path(path, output_folder=out_path)
+    convert_from_path(path, output_folder=out_path, fmt="jpeg")
