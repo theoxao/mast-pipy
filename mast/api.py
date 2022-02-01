@@ -182,8 +182,8 @@ def pdf2image():
     return ok(out_path)
 
 
-@bp.route('/download/<path>')
-def today(path):
+@bp.route('/download/<path>', methods=['GET', 'POST'])
+def download(path):
     base_dir = '/home/pi/remarkable/'
     path = os.path.join(base_dir, path)
     logging.log(logging.INFO, "download file , {}", path)
