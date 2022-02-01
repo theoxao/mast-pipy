@@ -188,8 +188,8 @@ def download():
     base_dir = '/home/pi/remarkable'
     p = os.path.join(base_dir, path)
     logging.log(logging.INFO, "download file , {}", p)
-    resp = make_response(open(p).read())
-    resp.headers["Content-type"] = "image/jpeg"
+    resp = open(p).read()
+    # resp.headers["Content-type"] = "image/jpeg"
     return resp
 
 
