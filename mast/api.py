@@ -195,6 +195,24 @@ def download(path):
     return response
 
 
+@bp.route('/ll', methods=['GET'])
+@use_kwargs({"path": fields.Str()}, location='query')
+def ll(path):
+    result = []
+    get_all(result, path)
+    return ok(result)
+
+
+def get_all(result, cwd):
+    get_dir = os.listdir(cwd)
+    for i in get_dir:
+        sub_dir = os.path.join(cwd, i)
+        if os.path.isdir(sub_dir):
+            get_all(result, sub_dir)
+        else:
+            result.append(os.path.join(cwd, i))
+
+
 def transfer(path, out_path):
     from pdf2image import convert_from_path
     logging.log(logging.INFO, "transfer pdf to image, {}, {}", path, out_path)
