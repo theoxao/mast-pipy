@@ -182,12 +182,13 @@ def pdf2image():
     return ok(out_path)
 
 
-@bp.route('/download/<path>', methods=['GET', 'POST'])
+@bp.route('/download', methods=['GET', 'POST'])
 def download(path):
+    path = request.args.get('path')
     base_dir = '/home/pi/remarkable'
-    path = os.path.join(base_dir, path)
-    logging.log(logging.INFO, "download file , {}", path)
-    resp = make_response(open(path).read())
+    p = os.path.join(base_dir, path)
+    logging.log(logging.INFO, "download file , {}", p)
+    resp = make_response(open(p).read())
     resp.headers["Content-type"] = "image/jpeg"
     return resp
 
