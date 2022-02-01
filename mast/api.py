@@ -7,7 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import requests
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, make_response
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, make_response,
+    send_from_directory
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -187,10 +188,8 @@ def download():
     path = request.args.get('path')
     base_dir = '/home/pi/remarkable'
     p = os.path.join(base_dir, path)
-    logging.log(logging.INFO, "download file , {}", p)
-    resp = open(p).read()
-    # resp.headers["Content-type"] = "image/jpeg"
-    return resp
+    response = make_response(send_from_directory(p, os.path.basename(p), as_attachment=True))
+    return response
 
 
 def transfer(path, out_path):
