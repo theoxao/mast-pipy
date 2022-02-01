@@ -6,7 +6,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 
 from webargs import fields
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_args, use_kwargs
 
 import requests
 from flask import (
@@ -187,8 +187,8 @@ def pdf2image():
 
 
 @bp.route('/download', methods=['GET'])
-@use_args({"path": fields.Str(required=True)})
-def download(args):
+@use_kwargs({"path": fields.Str()}, location='query')
+def download(path):
     base_dir = '/home/pi/remarkable'
     p = os.path.join(base_dir, args['path'])
     response = make_response(send_from_directory(p, os.path.basename(p), as_attachment=True))
