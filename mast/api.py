@@ -190,7 +190,7 @@ def pdf2image():
 @use_kwargs({"path": fields.Str()}, location='query')
 def download(path):
     base_dir = '/home/pi/remarkable'
-    p = os.path.join(base_dir, args['path'])
+    p = os.path.join(base_dir, path)
     response = make_response(send_from_directory(p, os.path.basename(p), as_attachment=True))
     return response
 
