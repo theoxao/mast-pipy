@@ -4,6 +4,8 @@ import socket
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
+
+from webargs import fields
 from webargs.flaskparser import use_args
 
 import requests
@@ -184,10 +186,11 @@ def pdf2image():
     return ok(out_path)
 
 
-@bp.route('/download/<path>', methods=['GET'])
-def download(path):
+@bp.route('/download', methods=['GET'])
+@use_args({"path": fields.Str(required=True)})
+def download(args):
     base_dir = '/home/pi/remarkable'
-    p = os.path.join(base_dir, path)
+    p = os.path.join(base_dir, args['path'])
     response = make_response(send_from_directory(p, os.path.basename(p), as_attachment=True))
     return response
 
