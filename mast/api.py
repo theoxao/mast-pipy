@@ -4,6 +4,7 @@ import socket
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
+from webargs.flaskparser import use_args
 
 import requests
 from flask import (
@@ -184,6 +185,7 @@ def pdf2image():
 
 
 @bp.route('/download', methods=['GET', 'POST'])
+@use_args
 def download(path):
     base_dir = '/home/pi/remarkable'
     p = os.path.join(base_dir, path)
