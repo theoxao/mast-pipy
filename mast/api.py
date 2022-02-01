@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import requests
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, make_response
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -180,6 +180,14 @@ def pdf2image():
     os.mkdir(out_path)
     executor.submit(transfer, path, out_path)
     return ok(out_path)
+
+
+@bp.route('/download/<path>')
+def today(path):
+    base_dir = os.path.dirname(__file__)
+    resp = make_response(open(os.path.join(base_dir, path)).read())
+    resp.headers["Content-type"] = "application/json;charset=UTF-8"
+    return resp
 
 
 def transfer(path, out_path):
