@@ -184,7 +184,7 @@ def pdf2image():
 
 @bp.route('/download/<path>')
 def today(path):
-    base_dir = os.path.dirname(__file__)
+    base_dir = '/home/pi/remarkable'
     resp = make_response(open(os.path.join(base_dir, path)).read())
     resp.headers["Content-type"] = "application/json;charset=UTF-8"
     return resp
