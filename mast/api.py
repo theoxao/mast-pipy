@@ -4,6 +4,10 @@ import socket
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
+import paramiko
+import scpclient
+
+from contextlib import closing
 
 from webargs import fields
 from webargs.flaskparser import use_args, use_kwargs
@@ -215,5 +219,10 @@ def get_all(result, cwd):
 
 def transfer(path, out_path):
     from pdf2image import convert_from_path
-    logging.log(logging.INFO, "transfer pdf to image, {}, {}", path, out_path)
     convert_from_path(path, output_folder=out_path, fmt="jpeg")
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    for file_path in os.listdir(out_path):
+        ssh.connect('www.theoxao.com', port=22, username='root', key_filename='/home/pi/.ssh/id_rsa')
+        with closing(scpclient.Write(ssh.get_transport(), "~")) as scp:
+            scp.send_file(file_path, True, remote_filename=file_path.replace('/home/pi/remarkable/', '/data/static'))
