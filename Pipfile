@@ -13,7 +13,7 @@ Flask-RESTful = "*"
 #"rpi.gpio" = "*"
 pdf2image = "~=1.16.0"
 Flask-Cors = "*"
-webargs = "~=8.1.0"
+webargs = "*"
 
 [dev-packages]
 
