@@ -10,12 +10,10 @@ marshmallow = "~=3.14.0"
 Flask = "~=2.0.2"
 Werkzeug = "~=2.0.2"
 Flask-RESTful = "*"
-"rpi.gpio" = "*"
+#"rpi.gpio" = "*"
 pdf2image = "~=1.16.0"
 Flask-Cors = "*"
 webargs = "~=8.1.0"
-paramiko = "*"
-scpclient = "*"
 
 [dev-packages]
 
