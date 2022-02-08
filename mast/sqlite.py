@@ -4,9 +4,15 @@ from flask import current_app, g;
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config["DATABASE"]
-        )
+        database = current_app.config["DATABASE"]
+        if type(database) is tuple:
+            g.db = sqlite3.connect(
+                database[0]
+            )
+        else:
+            g.db = sqlite3.connect(
+                database
+            )
 
     return g.db
 

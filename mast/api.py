@@ -1,5 +1,6 @@
 import json
 import os.path
+import os
 import socket
 import time
 import logging
@@ -164,7 +165,7 @@ def upload():
     file = request.files['file']
     filename, ext = os.path.splitext(file.filename)
     fn = int(round(time.time() * 1000)).__str__() + ext
-    path = os.path.join('/home/pi/remarkable/pdf', secure_filename(fn))
+    path = os.path.join(os.environ['STATIC_DIR'], secure_filename(fn))
     conn = get_db()
     file.save(path)
     conn.execute("insert into upload_file(name , path, create_time) values (?,?,?)", (filename, path, time.time()))
@@ -183,24 +184,17 @@ def pdf2image():
     name, _ = os.path.splitext(filename)
     out_path = directory + '/' + name
     print(out_path)
-    os.mkdir(out_path)
+    os.makedirs(out_path, exist_ok=True)
     executor.submit(transfer, path, out_path)
     return ok(out_path)
-
-
-@bp.route('/download', methods=['GET'])
-@use_kwargs({"path": fields.Str()}, location='query')
-def download(path):
-    base_dir = '/home/pi/remarkable/'
-    p = base_dir + path
-    response = make_response(send_from_directory(p, os.path.basename(path), as_attachment=True))
-    return response
 
 
 @bp.route('/ll', methods=['GET'])
 @use_kwargs({"path": fields.Str()}, location='query')
 def ll(path):
     result = []
+    if not path.startswith(os.environ['STATIC_DIR']):
+        return ok([])
     get_all(result, path)
     return ok(result)
 
@@ -217,4 +211,7 @@ def get_all(result, cwd):
 
 def transfer(path, out_path):
     from pdf2image import convert_from_path
-    convert_from_path(path, output_folder=out_path, fmt="jpeg")
+    try:
+        convert_from_path(path, output_folder=out_path, fmt="jpeg")
+    except Exception as err:
+        print("convert error", err)
