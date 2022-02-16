@@ -164,8 +164,10 @@ def param_timestamp():
 def upload():
     file = request.files['file']
     filename, ext = os.path.splitext(file.filename)
-    fn = int(round(time.time() * 1000)).__str__() + ext
-    path = os.path.join(os.environ['STATIC_DIR'], secure_filename(fn))
+    directory = int(round(time.time() * 1000)).__str__()
+    path = os.path.join(os.environ['STATIC_DIR'], secure_filename(directory + ext))
+    os.makedirs(os.path.join(os.environ['STATIC_DIR'], directory), exist_ok=True)
+    meta = os.path.join(os.environ['STATIC_DIR'], directory, 'meta.json')
     conn = get_db()
     file.save(path)
     conn.execute("insert into upload_file(name , path, create_time) values (?,?,?)", (filename, path, time.time()))
@@ -212,6 +214,7 @@ def get_all(result, cwd):
 def transfer(path, out_path):
     from pdf2image import convert_from_path
     try:
-        convert_from_path(path, output_folder=out_path, fmt="jpeg")
+        images = convert_from_path(path, output_folder=out_path, fmt="jpeg")
+        print("")
     except Exception as err:
         print("convert error", err)
