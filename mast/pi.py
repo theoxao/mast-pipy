@@ -2,7 +2,7 @@ import json
 
 import requests
 
-pi_host = "http://172.29.236.153:8000"
+pi_host = "http://172.29.236.153:8000/api"
 
 
 def update_state(position, value):
