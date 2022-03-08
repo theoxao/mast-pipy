@@ -58,7 +58,7 @@ def aligenie_task():
     conn = get_db()
     result = query_db('select * from device where position = ?', (pos,))[0]
     origin = result['value']
-    value = update_state(pos, origin ^ 1)
+    value = update_state(pos, origin ^ 1, result['detect'])
     conn.execute('update device set value = ? where position = ? ', (value, pos))
     # conn.execute('insert into operate_record ')
     globals().update({'timestamp': int(round(time.time() * 1000))})
@@ -146,7 +146,7 @@ def update_device():
     dev_id = request.get_json()['id']
     value = request.get_json()['value']
     dev = query_db('select * from device where id = ?', (dev_id,))[0]
-    ret_value = update_state(dev['position'], value)
+    ret_value = update_state(dev['position'], value, dev['detect'])
     conn = get_db()
     conn.execute('update device set value = ? where id = ? ', (ret_value, dev_id))
     # conn.execute('insert into operate_record ')
