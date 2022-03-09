@@ -34,7 +34,7 @@ def ok(result):
 
 @bp.app_errorhandler(Exception)
 def handle_invalid_usage(error):
-    return jsonify(code=500, message=error.to_dict(), data=result)
+    return jsonify(code=500, message=dict(error.payload or ()), data=result)
 
 
 @bp.route("/aligenie/task", methods=['POST'])
