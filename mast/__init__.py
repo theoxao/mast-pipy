@@ -32,6 +32,3 @@ def create_app(test_config=None):
     return app
 
 
-@app.errorhandler(Exception)
-def handle_invalid_usage(error):
-    return jsonify(code=500, message=error.to_dict(), data=result)

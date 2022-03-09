@@ -32,6 +32,11 @@ def ok(result):
     return jsonify(code=200, message='ok', data=result)
 
 
+@bp.app_errorhandler(Exception)
+def handle_invalid_usage(error):
+    return jsonify(code=500, message=error.to_dict(), data=result)
+
+
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
