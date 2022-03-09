@@ -30,7 +30,7 @@ globals().setdefault('timestamp', int(round(time.time() * 1000)))
 
 
 def ok(result):
-    return jsonify(code=200, message='ok', data=result)
+    return jsonify(code=200, message='ok', data=None)
 
 
 @bp.app_errorhandler(HTTPException)
