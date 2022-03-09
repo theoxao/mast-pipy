@@ -30,12 +30,12 @@ globals().setdefault('timestamp', int(round(time.time() * 1000)))
 
 
 def ok(result):
-    return jsonify(code=200, message='ok', data=None)
+    return jsonify(code=200, message='ok', data=result)
 
 
 @bp.app_errorhandler(HTTPException)
 def handle_invalid_usage(error):
-    return jsonify(code=error.code, message=error.original_exception, data=result)
+    return jsonify(code=error.code, message=error.original_exception, data=None)
 
 
 @bp.route("/aligenie/task", methods=['POST'])
