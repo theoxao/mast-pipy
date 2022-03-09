@@ -19,6 +19,7 @@ from flask import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTPException
 
 from .pi import update_state
 from .sqlite import get_db, query_db
