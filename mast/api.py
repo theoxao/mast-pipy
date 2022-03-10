@@ -35,7 +35,7 @@ def ok(result):
 
 @bp.app_errorhandler(HTTPException)
 def handle_invalid_usage(error):
-    return jsonify(code=500, message=error.__str__, data=None)
+    return jsonify(code=500, message="internal error", data=None)
 
 
 @bp.route("/aligenie/task", methods=['POST'])
