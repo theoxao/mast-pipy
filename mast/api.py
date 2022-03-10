@@ -14,7 +14,7 @@ from webargs.flaskparser import use_args, use_kwargs
 import requests
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, make_response,
-    send_from_directory
+    send_from_directory, current_app
 )
 
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -153,6 +153,7 @@ def update_device():
     value = request.get_json()['value']
     dev = query_db('select * from device where id = ?', (dev_id,))[0]
     ret_value = update_state(dev['position'], value, dev['detect'])
+    current_app.logger.info("return value: " + ret_value)
     conn = get_db()
     conn.execute('update device set value = ? where id = ? ', (ret_value, dev_id))
     # conn.execute('insert into operate_record ')
