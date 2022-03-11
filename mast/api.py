@@ -153,13 +153,12 @@ def update_device():
     value = request.get_json()['value']
     dev = query_db('select * from device where id = ?', (dev_id,))[0]
     ret_value = update_state(dev['position'], value, dev['detect'])
-    current_app.logger.info("return value: " + ret_value)
     conn = get_db()
     conn.execute('update device set value = ? where id = ? ', (ret_value, dev_id))
     # conn.execute('insert into operate_record ')
     globals().update({'timestamp': int(round(time.time() * 1000))})
     conn.commit()
-    return ok(int(value))
+    return ok(int(ret_value))
 
 
 @bp.route('/param/timestamp', methods=['GET'])
