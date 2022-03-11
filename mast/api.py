@@ -21,7 +21,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import HTTPException
 
-from .pi import update_state
+from .pi import update_state, query_state
 from .sqlite import get_db, query_db
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -103,6 +103,9 @@ def device_list():
 @bp.route('/device/<device_id>', methods=['GET'])
 def device(device_id):
     result = query_db('select * from device where id = ?', (device_id,))[0]
+    ret_value = query_state(result['detect'])
+    result.value = ret_value
+    conn.execute('update device set value = ? where id = ? ', (ret_value, device_id))
     return ok(result)
 
 
