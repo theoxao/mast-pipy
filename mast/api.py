@@ -104,7 +104,7 @@ def device_list():
 def device(device_id):
     result = query_db('select * from device where id = ?', (device_id,))[0]
     ret_value = query_state(result['detect'])
-    result.value = ret_value
+    result['value'] = ret_value
     conn.execute('update device set value = ? where id = ? ', (ret_value, device_id))
     return ok(result)
 
