@@ -158,7 +158,7 @@ def update_device():
     # conn.execute('insert into operate_record ')
     globals().update({'timestamp': int(round(time.time() * 1000))})
     conn.commit()
-    return ok(int(ret_value))
+    return ok(ret_value)
 
 
 @bp.route('/param/timestamp', methods=['GET'])
