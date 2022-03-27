@@ -83,7 +83,7 @@ def aligenie_task():
 
 @bp.route("/device/list", methods=['GET'])
 def device_list():
-    result = query_db('select * from device')
+    result = query_db('select * from device where support = 1')
     for device in result:
         if device.__contains__('room_id'):
             rs = query_db('select * from room where id = ?', (device['room_id'],))
