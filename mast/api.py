@@ -38,6 +38,11 @@ def handle_invalid_usage(error):
     return jsonify(code=500, message="internal error", data=None)
 
 
+@bp.route("/aligenie/task", methods=['GET'])
+def auth_aligenie():
+    return "Jfc4Z4Ur15JwUBuvUQD5wg7Nu8+l+HscqYlfofbyJdYrwmXUPrPUrLoC7K/NBG4h"
+
+
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
@@ -48,18 +53,20 @@ def aligenie_task():
     logging.log(logging.DEBUG, v0 + '----->' + v1)
     pos = -1
     if v1 == '客厅灯光':
-        pos = 1
-    if v1 == '餐厅灯光':
-        pos = 2
-    if v1 == '次卧灯光':
-        pos = 3
-    if v1 == '主卧背光':
         pos = 4
-    if v1 == '书房灯光':
+    if v1 == '餐厅灯光':
         pos = 5
-    if v1 == '主卧灯带':
+    if v1 == '次卧灯光':
         pos = 6
+    if v1 == '主卧背光':
+        pos = 3
+    if v1 == '书房灯光':
+        pos = 0
+    if v1 == '主卧灯带':
+        pos = 2
     if v1 == '主卧灯光':
+        pos = 1
+    if v1 == '厨房灯光':
         pos = 7
     conn = get_db()
     result = query_db('select * from device where position = ?', (pos,))[0]
