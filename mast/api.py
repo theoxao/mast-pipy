@@ -45,7 +45,7 @@ def aligenie_task():
     pm0 = entities[0]['intentParameterName']
     v0 = entities[0]['standardValue']
     v1 = entities[1]['standardValue']
-    current_app.logger.log(logging.DEBUG, v0 + '----->' + v1)
+    current_app.logger.log(v0 + '----->' + v1)
     pos = -1
     if v1 == '客厅灯光':
         pos = 4
