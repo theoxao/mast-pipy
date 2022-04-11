@@ -38,11 +38,6 @@ def handle_invalid_usage(error):
     return jsonify(code=500, message="internal error", data=None)
 
 
-@bp.route("/aligenie/5e9199f65abd9c10124f2f35e294f91b.txt", methods=['GET'])
-def auth_aligenie(file):
-    return "Jfc4Z4Ur15JwUBuvUQD5wg7Nu8+l+HscqYlfofbyJdYrwmXUPrPUrLoC7K/NBG4h"
-
-
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
@@ -50,7 +45,7 @@ def aligenie_task():
     pm0 = entities[0]['intentParameterName']
     v0 = entities[0]['standardValue']
     v1 = entities[1]['standardValue']
-    logging.log(logging.DEBUG, v0 + '----->' + v1)
+    current_app.logger.log(logging.DEBUG, v0 + '----->' + v1)
     pos = -1
     if v1 == '客厅灯光':
         pos = 4
