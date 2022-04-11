@@ -41,6 +41,7 @@ def handle_invalid_usage(error):
 @bp.route("/aligenie/task", methods=['POST'])
 def aligenie_task():
     query = request.get_json()
+    current_app.logger.log(query)
     entities = query['slotEntities']
     pm0 = entities[0]['intentParameterName']
     v0 = entities[0]['standardValue']
