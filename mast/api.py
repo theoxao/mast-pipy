@@ -38,8 +38,8 @@ def handle_invalid_usage(error):
     return jsonify(code=500, message="internal error", data=None)
 
 
-@bp.route("/aligenie/task", methods=['GET'])
-def auth_aligenie():
+@bp.route("/aligenie/5e9199f65abd9c10124f2f35e294f91b.txt", methods=['GET'])
+def auth_aligenie(file):
     return "Jfc4Z4Ur15JwUBuvUQD5wg7Nu8+l+HscqYlfofbyJdYrwmXUPrPUrLoC7K/NBG4h"
 
 
