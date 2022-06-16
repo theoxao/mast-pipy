@@ -6,6 +6,12 @@ import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
+import base64
+
+import dlib
+import cv2
+import numpy as np
+
 from contextlib import closing
 
 from webargs import fields
@@ -141,6 +147,38 @@ def cate_list():
 @bp.route('/ping', methods=['GET'])
 def ping():
     return ok(socket.gethostbyname(socket.gethostname()))
+
+
+detector = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor('mast/shape_predictor_68_face_landmarks.dat')
+
+
+@bp.route("/face_crop", methods=['GET'])
+@use_kwargs({"url": fields.Str()}, location='query')
+def crop(url):
+    from urllib import request
+    resp = request.urlopen(url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    img = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    faces = detector(img)
+    print("there are " + len(faces).__str__() + " faces")
+    # find max
+    max_index = 0
+    max_size = 0
+    for ix in range(len(faces)):
+        face = faces[ix]
+        cur_size = (face.bottom() - face.top()) ** 2 + (face.right() - face.left()) ** 2
+        if cur_size > max_size:
+            max_size = cur_size
+            max_index = ix
+    face = faces[max_index]
+    return ok({
+        "faces": len(faces),
+        "top": face.top() - 50,
+        "bottom": face.bottom() + 50,
+        "left": face.left() - 50,
+        "right": face.right() + 50,
+    })
 
 
 @bp.route('/weather', methods=['GET'])
