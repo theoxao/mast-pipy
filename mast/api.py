@@ -194,7 +194,11 @@ def crop(url):
     for i in range(height):
         for j in range(width):
             img_blank[i][j] = img[face.top() - 50 + i][face.left() - 50 + j]
-    file_name = "cropped_face_" + int(time.time()).__str__() + ".jpg"
+
+    now = datetime.datetime.now()
+    date = now.strftime("%Y-%m-%d")
+
+    file_name = "/" + date + "/cropped_face_" + int(time.time()).__str__() + ".jpg"
     print("Save into:", path_save + file_name)
 
     cv2.imwrite(path_save + file_name, img_blank)
