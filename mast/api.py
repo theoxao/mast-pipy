@@ -163,10 +163,8 @@ def mkdir_for_save_images():
         os.mkdir(p)
 
 
-path_save = "/data/static/face"
-# path_save = "/Users/theo/"
-
-
+# path_save = "/data/static/face"
+path_save = "/Users/theo/"
 
 
 @bp.route("/face_crop", methods=['GET'])
@@ -174,12 +172,14 @@ path_save = "/data/static/face"
     "url": fields.Str()
 }, location='query')
 def crop(url):
+    current_app.logger.log(logging.ERROR, url)
     mkdir_for_save_images()
     from urllib import request
     opener = request.build_opener()
     opener.addheaders = [('User-Agent',
                           'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
     request.install_opener(opener)
+    url = url.replace("%26", "&")
     resp = request.urlopen(url)
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     img = cv2.imdecode(image, cv2.IMREAD_COLOR)
