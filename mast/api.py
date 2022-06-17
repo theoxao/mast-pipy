@@ -153,8 +153,21 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('mast/shape_predictor_68_face_landmarks.dat')
 
 
+def mkdir_for_save_images():
+    if not os.path.isdir(path_save):
+        os.mkdir(path_save)
+
+
+path_save = "/data/static/face"
+# path_save = "/Users/theo/"
+
+mkdir_for_save_images()
+
+
 @bp.route("/face_crop", methods=['GET'])
-@use_kwargs({"url": fields.Str()}, location='query')
+@use_kwargs({
+    "url": fields.Str()
+}, location='query')
 def crop(url):
     from urllib import request
     resp = request.urlopen(url)
@@ -172,13 +185,20 @@ def crop(url):
             max_size = cur_size
             max_index = ix
     face = faces[max_index]
-    return ok({
-        "faces": len(faces),
-        "top": face.top() - 50,
-        "bottom": face.bottom() + 50,
-        "left": face.left() - 50,
-        "right": face.right() + 50,
-    })
+    height = face.bottom() - face.top() + 100
+    width = face.right() - face.left() + 100
+
+    # 根据人脸大小生成空的图像
+    img_blank = np.zeros((height, width, 3), np.uint8)
+
+    for i in range(height):
+        for j in range(width):
+            img_blank[i][j] = img[face.top() - 50 + i][face.left() - 50 + j]
+    file_name = "cropped_face_" + int(time.time()).__str__() + ".jpg"
+    print("Save into:", path_save + file_name)
+
+    cv2.imwrite(path_save + file_name, img_blank)
+    return ok("http://static.theoxao.com/face/" + file_name)
 
 
 @bp.route('/weather', methods=['GET'])
