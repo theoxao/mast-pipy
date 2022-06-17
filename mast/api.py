@@ -163,8 +163,10 @@ def mkdir_for_save_images():
         os.mkdir(p)
 
 
-# path_save = "/data/static/face"
-path_save = "/Users/theo/"
+path_save = "/data/static/face"
+
+
+# path_save = "/Users/theo/"
 
 
 @bp.route("/face_crop", methods=['GET'])
