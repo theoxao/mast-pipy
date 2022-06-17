@@ -41,6 +41,14 @@ def ok(result):
     return jsonify(code=200, message='ok', data=result)
 
 
+def not_ok(msg):
+    return jsonify(code=500, message=msg, data=None)
+
+
+def error():
+    return jsonify(code=500, message='not ok', data=None)
+
+
 @bp.app_errorhandler(HTTPException)
 def handle_invalid_usage(error):
     return jsonify(code=500, message="internal error", data=None)
@@ -126,7 +134,7 @@ def device(device_id):
 def rm_device():
     result = query_db('select * from rm_device order by sort')
     for rm in result:
-        rm['device'] = query_db('select * from device where id = ?' ,(rm['device_id'],))
+        rm['device'] = query_db('select * from device where id = ?', (rm['device_id'],))
     return ok(result)
 
 
@@ -163,58 +171,57 @@ def mkdir_for_save_images():
         os.mkdir(p)
 
 
-path_save = "/data/static/face"
+# path_save = "/data/static/face"
+path_save = "/Users/theo/"
 
 
-# path_save = "/Users/theo/"
-
-
-@bp.route("/face_crop", methods=['GET'])
-@use_kwargs({
-    "url": fields.Str()
-}, location='query')
-def crop(url):
+@bp.route("/face_crop", methods=['POST'])
+def crop():
+    url = request.json['url']
     current_app.logger.log(logging.ERROR, url)
-    mkdir_for_save_images()
-    from urllib import request
-    opener = request.build_opener()
-    opener.addheaders = [('User-Agent',
-                          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
-    request.install_opener(opener)
-    url = url.replace("%26", "&")
-    resp = request.urlopen(url)
-    image = np.asarray(bytearray(resp.read()), dtype="uint8")
-    img = cv2.imdecode(image, cv2.IMREAD_COLOR)
-    faces = detector(img)
-    print("there are " + len(faces).__str__() + " faces")
-    # find max
-    max_index = 0
-    max_size = 0
-    for ix in range(len(faces)):
-        face = faces[ix]
-        cur_size = (face.bottom() - face.top()) ** 2 + (face.right() - face.left()) ** 2
-        if cur_size > max_size:
-            max_size = cur_size
-            max_index = ix
-    face = faces[max_index]
-    height = face.bottom() - face.top() + 100
-    width = face.right() - face.left() + 100
+    try:
+        mkdir_for_save_images()
+        import urllib
+        opener = urllib.request.build_opener()
+        opener.addheaders = [('User-Agent',
+                              'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+        urllib.request.install_opener(opener)
+        resp = urllib.request.urlopen(url)
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        img = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        faces = detector(img)
+        if len(faces) == 0:
+            return not_ok("no faces detected")
+        print("there are " + len(faces).__str__() + " faces")
+        # find max
+        max_index = 0
+        max_size = 0
+        for ix in range(len(faces)):
+            face = faces[ix]
+            cur_size = (face.bottom() - face.top()) ** 2 + (face.right() - face.left()) ** 2
+            if cur_size > max_size:
+                max_size = cur_size
+                max_index = ix
+        face = faces[max_index]
+        height = face.bottom() - face.top() + 100
+        width = face.right() - face.left() + 100
 
-    # 根据人脸大小生成空的图像
-    img_blank = np.zeros((height, width, 3), np.uint8)
+        # 根据人脸大小生成空的图像
+        img_blank = np.zeros((height, width, 3), np.uint8)
 
-    for i in range(height):
-        for j in range(width):
-            img_blank[i][j] = img[face.top() - 50 + i][face.left() - 50 + j]
+        for i in range(height):
+            for j in range(width):
+                img_blank[i][j] = img[face.top() - 50 + i][face.left() - 50 + j]
 
-    now = datetime.datetime.now()
-    date = now.strftime("%Y-%m-%d")
+        now = datetime.datetime.now()
+        date = now.strftime("%Y-%m-%d")
 
-    file_name = "/" + date + "/cropped_face_" + int(time.time()).__str__() + ".jpg"
-    print("Save into:", path_save + file_name)
-
-    cv2.imwrite(path_save + file_name, img_blank)
-    return ok("http://static.theoxao.com/face/" + file_name)
+        file_name = "/" + date + "/cropped_face_" + int(time.time()).__str__() + ".jpg"
+        print("Save into:", path_save + file_name)
+        cv2.imwrite(path_save + file_name, img_blank)
+        return ok("http://static.theoxao.com/face/" + file_name)
+    except:
+        return error()
 
 
 @bp.route('/weather', methods=['GET'])
@@ -225,7 +232,8 @@ def weather():
             json_data = json.load(f)
             return ok(json_data)
     else:
-        data = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat=30.287716668804674&lon=120.06577596450808&lang=zh_cn&units=metric&appid=2a49e2d2ff8a324e28c6f717685f55e3')
+        data = requests.get(
+            'https://api.openweathermap.org/data/2.5/onecall?lat=30.287716668804674&lon=120.06577596450808&lang=zh_cn&units=metric&appid=2a49e2d2ff8a324e28c6f717685f55e3')
         return ok(data.json())
 
 
