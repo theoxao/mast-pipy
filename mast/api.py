@@ -156,14 +156,17 @@ predictor = dlib.shape_predictor('mast/shape_predictor_68_face_landmarks.dat')
 
 
 def mkdir_for_save_images():
-    if not os.path.isdir(path_save):
-        os.mkdir(path_save)
+    now = datetime.datetime.now()
+    date = now.strftime("%Y-%m-%d")
+    p = path_save + "/" + date
+    if not os.path.isdir(p):
+        os.mkdir(p)
 
 
 path_save = "/data/static/face"
 # path_save = "/Users/theo/"
 
-mkdir_for_save_images()
+
 
 
 @bp.route("/face_crop", methods=['GET'])
@@ -171,6 +174,7 @@ mkdir_for_save_images()
     "url": fields.Str()
 }, location='query')
 def crop(url):
+    mkdir_for_save_images()
     from urllib import request
     resp = request.urlopen(url)
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
