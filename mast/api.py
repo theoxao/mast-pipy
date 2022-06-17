@@ -191,7 +191,7 @@ def crop():
         img = cv2.imdecode(image, cv2.IMREAD_COLOR)
         faces = detector(img)
         if len(faces) == 0:
-            return not_ok("no faces detected")
+            return ok(url)
         print("there are " + len(faces).__str__() + " faces")
         # find max
         max_index = 0
@@ -221,7 +221,7 @@ def crop():
         cv2.imwrite(path_save + file_name, img_blank)
         return ok("http://static.theoxao.com/face/" + file_name)
     except:
-        return error()
+        return ok(url)
 
 
 @bp.route('/weather', methods=['GET'])
