@@ -176,6 +176,10 @@ path_save = "/data/static/face"
 def crop(url):
     mkdir_for_save_images()
     from urllib import request
+    opener = request.build_opener()
+    opener.addheaders = [('User-Agent',
+                          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
+    request.install_opener(opener)
     resp = request.urlopen(url)
     image = np.asarray(bytearray(resp.read()), dtype="uint8")
     img = cv2.imdecode(image, cv2.IMREAD_COLOR)
